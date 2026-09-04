@@ -416,42 +416,7 @@
       margin-bottom: 16px;
       font-size: 0.95rem;
     }
-    
-/* Кнопки управления корзиной */
-    .btn-remove {
-      background: transparent;
-      border: 1px solid #111;
-      color: #111;
-      font-family: inherit;
-      font-weight: 800;
-      font-size: 0.75rem;
-      padding: 2px 6px;
-      cursor: pointer;
-      margin-left: 8px;
-      line-height: 1;
-    }
-    .btn-remove:hover {
-      background: #111;
-      color: #fff;
-    }
-    .btn-clear-cart {
-      background: transparent;
-      border: 1px dashed #777;
-      color: #555;
-      font-family: inherit;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 8px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 10px;
-      text-transform: uppercase;
-    }
-    .btn-clear-cart:hover {
-      border-color: #111;
-      color: #111;
-      background: rgba(0,0,0,0.05);
-    }
+
     /* 5. TIMELINE */
     .timeline-section {
       padding: 80px 24px;
@@ -485,7 +450,7 @@
       margin-bottom: 8px;
     }
 
-    /* 6. TERMINAL */
+    /* 6. TERMINAL CHECKOUT */
     .checkout-section {
       padding: 80px 24px;
       background: #050505;
@@ -527,6 +492,42 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 8px;
+    }
+
+    /* Кнопки управления корзиной */
+    .btn-remove {
+      background: transparent;
+      border: 1px solid #111;
+      color: #111;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      cursor: pointer;
+      margin-left: 8px;
+      line-height: 1;
+    }
+    .btn-remove:hover {
+      background: #111;
+      color: #fff;
+    }
+    .btn-clear-cart {
+      background: transparent;
+      border: 1px dashed #777;
+      color: #555;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+    .btn-clear-cart:hover {
+      border-color: #111;
+      color: #111;
+      background: rgba(0,0,0,0.05);
     }
 
     .checkout-form {
@@ -664,7 +665,6 @@
 </head>
 <body>
 
-  <!-- 1. STICKY HEADER -->
   <header>
     <div class="header-main">
       <div class="status-live">
@@ -684,7 +684,6 @@
     </div>
   </header>
 
-  <!-- 2. HERO SECTION -->
   <section class="hero-section">
     <video class="video-bg" autoplay muted loop playsinline preload="auto">
       <source src="./hero.mp4" type="video/mp4">
@@ -701,7 +700,6 @@
     </div>
   </section>
 
-  <!-- 3. CATALOG SECTION -->
   <section class="catalog-section" id="catalog">
     <h2 class="section-title">ВЫБИРАЙ ПО ФАКТУ</h2>
 
@@ -714,11 +712,10 @@
 
     <div class="grid-catalog" id="catalogGrid">
       
-      <!-- Карточка 1 -->
       <div class="card" data-category="spicy hunger">
         <div class="card-img-wrapper">
           <span class="card-badge">HOT</span>
-          <img src="./beef.jpg" alt="Дымная говядина & Дикий перец" loading="lazy">
+          <img src="./pictures/beef.jpeg" alt="Дымная говядина & Дикий перец" loading="lazy">
         </div>
         <div class="card-body">
           <h3 class="card-title">Дымная говядина & Перец</h3>
@@ -731,11 +728,10 @@
         </div>
       </div>
 
-      <!-- Карточка 2 -->
       <div class="card" data-category="spicy">
         <div class="card-img-wrapper">
           <span class="card-badge">CRUNCH</span>
-          <img src="./lime.jpg" alt="Кислотный лайм & Острый халапеньо" loading="lazy">
+          <img src="./pictures/lime.jpeg" alt="Кислотный лайм & Острый халапеньо" loading="lazy">
         </div>
         <div class="card-body">
           <h3 class="card-title">Лайм & Халапеньо Начос</h3>
@@ -748,11 +744,10 @@
         </div>
       </div>
 
-      <!-- Карточка 3 -->
       <div class="card" data-category="hunger">
         <div class="card-img-wrapper">
           <span class="card-badge">TOP</span>
-          <img src="./cheese.jpg" alt="Трюфельный пармезан & Чеснок" loading="lazy">
+          <img src="./pictures/cheese.jpeg" alt="Трюфельный пармезан & Чеснок" loading="lazy">
         </div>
         <div class="card-body">
           <h3 class="card-title">Пармезан & Трюфель</h3>
@@ -765,11 +760,10 @@
         </div>
       </div>
 
-      <!-- Карточка 4 -->
       <div class="card" data-category="hunger">
         <div class="card-img-wrapper">
           <span class="card-badge">FATAL</span>
-          <img src="./bacon.jpg" alt="Копченый бекон & Хрустящий лук" loading="lazy">
+          <img src="./pictures/bacon.jpeg" alt="Копченый бекон & Хрустящий лук" loading="lazy">
         </div>
         <div class="card-body">
           <h3 class="card-title">Бекон & Жареный лук</h3>
@@ -782,11 +776,10 @@
         </div>
       </div>
 
-      <!-- Карточка 5 -->
       <div class="card" data-category="protein">
         <div class="card-img-wrapper">
           <span class="card-badge">24G PROTEIN</span>
-          <img src="./almond.jpg" alt="Чистый миндаль & Морская соль" loading="lazy">
+          <img src="./pictures/almond.jpeg" alt="Чистый миндаль & Морская соль" loading="lazy">
         </div>
         <div class="card-body">
           <h3 class="card-title">Миндаль & Розовая соль</h3>
@@ -802,7 +795,6 @@
     </div>
   </section>
 
-  <!-- 4. MANIFESTO -->
   <section class="manifesto-section">
     <div class="manifesto-container">
       <h2 class="section-title">ПОЧЕМУ ДРУГИЕ ВРУТ, А МЫ НЕТ</h2>
@@ -825,7 +817,6 @@
     </div>
   </section>
 
-  <!-- 5. DELIVERY TIMELINE -->
   <section class="timeline-section">
     <h2 class="section-title">20 МИНУТ И МЫ У ДВЕРИ</h2>
     <div class="timeline-grid">
@@ -847,7 +838,6 @@
     </div>
   </section>
 
-  <!-- 6. TERMINAL CHECKOUT -->
   <section class="checkout-section" id="checkout">
     <div class="terminal-wrapper">
       <div class="receipt-header">
@@ -895,7 +885,6 @@
     </div>
   </section>
 
-  <!-- 7. FOOTER -->
   <footer>
     <div class="footer-grid">
       <div>
@@ -909,13 +898,12 @@
         <p>CAREER: job@naglo.io</p>
       </div>
       <div>
-        <img src="./stickers.jpg" alt="Graphic stickers" class="sticker-strip" loading="lazy">
+        <img src="./pictures/stickers.jpeg" alt="Graphic stickers" class="sticker-strip" loading="lazy">
         <p style="color: #666; font-size: 0.75rem;">© 2026 НАГЛО. Сделано без совести, но со вкусом.</p>
       </div>
     </div>
   </footer>
 
-  <!-- MODAL TIMER -->
   <div class="timer-modal" id="timerModal">
     <div class="timer-content">
       <h2 class="heading-font" style="font-size: 2rem;">ЗАКАЗ УЛЕТЕЛ НА СКЛАД!</h2>
@@ -938,13 +926,11 @@
       setTimeout(() => headerPill.style.transform = 'scale(1)', 150);
     }
 
-    // Удаление конкретного товара по индексу
     function removeFromCart(index) {
       cart.splice(index, 1);
       updateCartUI();
     }
 
-    // Полная очистка корзины
     function clearCart() {
       cart.length = 0;
       updateCartUI();
