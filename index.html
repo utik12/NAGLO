@@ -416,7 +416,42 @@
       margin-bottom: 16px;
       font-size: 0.95rem;
     }
-
+    
+/* Кнопки управления корзиной */
+    .btn-remove {
+      background: transparent;
+      border: 1px solid #111;
+      color: #111;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      cursor: pointer;
+      margin-left: 8px;
+      line-height: 1;
+    }
+    .btn-remove:hover {
+      background: #111;
+      color: #fff;
+    }
+    .btn-clear-cart {
+      background: transparent;
+      border: 1px dashed #777;
+      color: #555;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+    .btn-clear-cart:hover {
+      border-color: #111;
+      color: #111;
+      background: rgba(0,0,0,0.05);
+    }
     /* 5. TIMELINE */
     .timeline-section {
       padding: 80px 24px;
@@ -903,6 +938,18 @@
       setTimeout(() => headerPill.style.transform = 'scale(1)', 150);
     }
 
+    // Удаление конкретного товара по индексу
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    // Полная очистка корзины
+    function clearCart() {
+      cart.length = 0;
+      updateCartUI();
+    }
+
     function updateCartUI() {
       document.getElementById('cartCount').innerText = cart.length;
       const receiptContainer = document.getElementById('receiptItems');
@@ -917,9 +964,12 @@
       cart.forEach((item, idx) => {
         total += item.price;
         html += `
-          <div class="receipt-row">
+          <div class="receipt-row" style="align-items: center;">
             <span>${idx + 1}. ${item.title}</span>
-            <span>${item.price} ₽</span>
+            <span style="display: flex; align-items: center;">
+              ${item.price} ₽
+              <button type="button" class="btn-remove" title="Убрать из чека" onclick="removeFromCart(${idx})">✕</button>
+            </span>
           </div>
         `;
       });
@@ -929,6 +979,7 @@
           <span>ИТОГО К ОПЛАТЕ:</span>
           <span>${total} ₽</span>
         </div>
+        <button type="button" class="btn-clear-cart" onclick="clearCart()">[ Очистить весь чек ]</button>
       `;
       receiptContainer.innerHTML = html;
     }
@@ -981,8 +1032,7 @@
 
     function closeModal() {
       document.getElementById('timerModal').style.display = 'none';
-      cart.length = 0;
-      updateCartUI();
+      clearCart();
     }
   </script>
 </body>
