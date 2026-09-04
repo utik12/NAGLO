@@ -1,0 +1,109 @@
+<script>
+    const cart = [];
+
+    function addToCart(title, price) {
+      cart.push({ title, price });
+      updateCartUI();
+      
+      const headerPill = document.getElementById('cartHeaderBtn');
+      headerPill.style.transform = 'scale(1.1)';
+      setTimeout(() => headerPill.style.transform = 'scale(1)', 150);
+    }
+
+    // Удаление конкретного товара по индексу
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    // Полная очистка корзины
+    function clearCart() {
+      cart.length = 0;
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      document.getElementById('cartCount').innerText = cart.length;
+      const receiptContainer = document.getElementById('receiptItems');
+      
+      if (cart.length === 0) {
+        receiptContainer.innerHTML = `<div class="receipt-row" style="color: #777;"><span>Корзина пуста. Добавь что-нибудь сверху!</span></div>`;
+        return;
+      }
+
+      let total = 0;
+      let html = '';
+      cart.forEach((item, idx) => {
+        total += item.price;
+        html += `
+          <div class="receipt-row" style="align-items: center;">
+            <span>${idx + 1}. ${item.title}</span>
+            <span style="display: flex; align-items: center;">
+              ${item.price} ₽
+              <button type="button" class="btn-remove" title="Убрать из чека" onclick="removeFromCart(${idx})">✕</button>
+            </span>
+          </div>
+        `;
+      });
+
+      html += `
+        <div class="receipt-row" style="border-top: 1px solid #111; padding-top: 8px; font-weight: 800; font-size: 1.1rem; margin-top: 8px;">
+          <span>ИТОГО К ОПЛАТЕ:</span>
+          <span>${total} ₽</span>
+        </div>
+        <button type="button" class="btn-clear-cart" onclick="clearCart()">[ Очистить весь чек ]</button>
+      `;
+      receiptContainer.innerHTML = html;
+    }
+
+    function filterItems(category, event) {
+      const tags = document.querySelectorAll('.filter-tag');
+      tags.forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const cards = document.querySelectorAll('.grid-catalog .card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category').includes(category)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function handleOrderSubmit(e) {
+      e.preventDefault();
+      if (cart.length === 0) {
+        alert('Сначала закинь хотя бы одну пачку в корзину!');
+        return;
+      }
+      
+      document.getElementById('timerModal').style.display = 'flex';
+      startDeliveryTimer(20 * 60);
+    }
+
+    function startDeliveryTimer(durationSeconds) {
+      let timer = durationSeconds;
+      const display = document.getElementById('timerValue');
+      
+      const interval = setInterval(() => {
+        let minutes = parseInt(timer / 60, 10);
+        let seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          clearInterval(interval);
+          display.textContent = "00:00";
+        }
+      }, 1000);
+    }
+
+    function closeModal() {
+      document.getElementById('timerModal').style.display = 'none';
+      clearCart();
+    }
+  </script>
