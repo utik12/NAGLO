@@ -1,4 +1,932 @@
-<script>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>НАГЛО — Дерзкая еда без сказок</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0D0D0D;
+      --card-bg: #141414;
+      --orange: #FF4D00;
+      --white: #F4F4F0;
+      --gray: #222222;
+      --gray-light: #888888;
+      --border: 2px solid #282828;
+      --border-accent: 2px solid var(--orange);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--white);
+      font-family: 'JetBrains Mono', monospace;
+      overflow-x: hidden;
+      line-height: 1.4;
+    }
+
+    h1, h2, h3, .heading-font {
+      font-family: 'Chakra Petch', sans-serif;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--orange); }
+
+    /* 1. HEADER & TICKER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--white);
+    }
+
+    .header-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      border-bottom: 1px solid #282828;
+    }
+
+    .status-live {
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-live .dot {
+      width: 8px;
+      height: 8px;
+      background: #00FF66;
+      border-radius: 50%;
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    .brand-logo {
+      font-size: 2.2rem;
+      color: var(--white);
+      text-decoration: none;
+      border: 3px solid var(--white);
+      padding: 0 12px;
+      box-shadow: 4px 4px 0px var(--orange);
+      transition: all 0.15s ease;
+    }
+
+    .brand-logo:hover {
+      background: var(--orange);
+      box-shadow: 4px 4px 0px var(--white);
+    }
+
+    .cart-pill {
+      background: transparent;
+      border: 2px solid var(--orange);
+      color: var(--orange);
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .cart-pill:hover {
+      background: var(--orange);
+      color: var(--bg);
+    }
+
+    .ticker {
+      background: var(--orange);
+      color: var(--bg);
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 4px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      display: flex;
+    }
+
+    .ticker-inner {
+      display: inline-block;
+      animation: marquee 16s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* 2. HERO */
+    .hero-section {
+      position: relative;
+      height: 90vh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px 24px;
+      overflow: hidden;
+      border-bottom: 2px solid var(--white);
+    }
+
+    .video-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.65;
+      z-index: 1;
+      filter: contrast(1.1) brightness(0.9);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(13,13,13,0.2) 0%, rgba(13,13,13,0.85) 100%);
+      z-index: 2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 1200px;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 9vw, 8.5rem);
+      line-height: 0.85;
+      margin-bottom: 20px;
+      text-shadow: 4px 4px 0px #000;
+    }
+
+    .hero-title span {
+      color: var(--orange);
+      display: block;
+    }
+
+    .hero-tagline {
+      display: inline-block;
+      background: var(--white);
+      color: var(--bg);
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: clamp(0.9rem, 2vw, 1.3rem);
+      margin-bottom: 24px;
+      box-shadow: 4px 4px 0px var(--orange);
+    }
+
+    .hero-btn {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--white);
+      font-size: 1.2rem;
+      padding: 18px 36px;
+      border: 2px solid var(--white);
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 6px 6px 0px var(--white);
+      transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .hero-btn:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0px var(--white);
+      background: #e04400;
+    }
+
+    /* 3. CATALOG */
+    .catalog-section {
+      padding: 80px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      margin-bottom: 20px;
+    }
+
+    .filters-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .filter-tag {
+      background: transparent;
+      border: 1px solid var(--gray-light);
+      color: var(--white);
+      padding: 8px 16px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-tag.active, .filter-tag:hover {
+      background: var(--white);
+      color: var(--bg);
+      border-color: var(--white);
+      font-weight: 700;
+    }
+
+    .grid-catalog {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: var(--border);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--orange);
+    }
+
+    .card-img-wrapper {
+      position: relative;
+      width: 100%;
+      height: 340px;
+      background: #080808;
+      overflow: hidden;
+      border-bottom: var(--border);
+    }
+
+    .card-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card:hover .card-img-wrapper img {
+      transform: scale(1.08);
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--orange);
+      color: var(--white);
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    .card-specs {
+      font-size: 0.8rem;
+      color: var(--orange);
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-family: monospace;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .card-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px dashed var(--gray-light);
+      padding-top: 16px;
+    }
+
+    .card-price {
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .btn-add {
+      background: transparent;
+      border: 2px solid var(--white);
+      color: var(--white);
+      padding: 8px 16px;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-add:hover {
+      background: var(--white);
+      color: var(--bg);
+    }
+
+    /* 4. MANIFESTO */
+    .manifesto-section {
+      background: #111;
+      border-top: 2px solid var(--white);
+      border-bottom: 2px solid var(--white);
+      padding: 80px 24px;
+    }
+
+    .manifesto-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .comparison-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 40px;
+      border: 2px solid var(--white);
+    }
+
+    .comp-col {
+      padding: 32px;
+    }
+
+    .comp-col.them {
+      border-right: 2px solid var(--white);
+      background: #161616;
+      color: #777;
+    }
+
+    .comp-col.naglo {
+      background: var(--card-bg);
+      position: relative;
+    }
+
+    .comp-col h3 {
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      color: var(--white);
+    }
+
+    .comp-col.naglo h3 {
+      color: var(--orange);
+    }
+
+    .comp-item {
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+    }
+
+    /* 5. TIMELINE */
+    .timeline-section {
+      padding: 80px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 2px solid var(--white);
+      margin-top: 40px;
+    }
+
+    .time-step {
+      padding: 32px;
+      border-right: 2px solid var(--white);
+      background: var(--card-bg);
+      position: relative;
+    }
+
+    .time-step:last-child {
+      border-right: none;
+    }
+
+    .step-num {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+
+    /* 6. TERMINAL */
+    .checkout-section {
+      padding: 80px 24px;
+      background: #050505;
+      border-top: 2px solid var(--white);
+    }
+
+    .terminal-wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #EFEFEA;
+      color: #111;
+      border: 3px solid var(--white);
+      box-shadow: 12px 12px 0px var(--orange);
+      position: relative;
+    }
+
+    .terminal-wrapper::before {
+      content: "";
+      position: absolute;
+      top: -8px; left: 0; right: 0;
+      height: 8px;
+      background: radial-gradient(circle, transparent 4px, #EFEFEA 5px);
+      background-size: 16px 8px;
+    }
+
+    .receipt-header {
+      padding: 24px 24px 16px;
+      text-align: center;
+      border-bottom: 2px dashed #999;
+    }
+
+    .receipt-items {
+      padding: 20px 24px;
+      border-bottom: 2px dashed #999;
+      font-size: 0.9rem;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .checkout-form {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .form-control {
+      background: transparent;
+      border: 2px solid #111;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: #111;
+      outline: none;
+    }
+
+    .form-control:focus {
+      background: #fff;
+      border-color: var(--orange);
+    }
+
+    .btn-submit {
+      background: var(--orange);
+      color: var(--white);
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: 18px;
+      border: 3px solid #111;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #111;
+      margin-top: 12px;
+      transition: transform 0.1s;
+    }
+
+    .btn-submit:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #111;
+    }
+
+    .btn-submit:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #111;
+    }
+
+    /* MODAL TIMER */
+    .timer-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .timer-content {
+      background: var(--bg);
+      border: 3px solid var(--orange);
+      padding: 48px;
+      text-align: center;
+      max-width: 500px;
+      box-shadow: 12px 12px 0px var(--white);
+    }
+
+    .timer-display {
+      font-size: 4.5rem;
+      font-weight: 800;
+      color: var(--orange);
+      font-family: 'Chakra Petch', monospace;
+      margin: 20px 0;
+    }
+
+    /* 7. FOOTER */
+    footer {
+      border-top: 2px solid var(--white);
+      padding: 60px 24px 30px;
+      background: var(--bg);
+      font-size: 0.85rem;
+    }
+
+    .footer-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .sticker-strip {
+      max-width: 100%;
+      height: 120px;
+      object-fit: cover;
+      filter: grayscale(1) invert(0.1);
+      border: 1px solid var(--gray);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .comparison-table, .timeline-grid {
+        grid-template-columns: 1fr;
+      }
+      .comp-col.them, .time-step {
+        border-right: none;
+        border-bottom: 2px solid var(--white);
+      }
+      .hero-section {
+        height: 85vh;
+      }
+      .header-main {
+        padding: 10px 16px;
+      }
+      .brand-logo {
+        font-size: 1.5rem;
+      }
+    }
+      /* Кнопки управления корзиной */
+    .btn-remove {
+      background: transparent;
+      border: 1px solid #111;
+      color: #111;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      cursor: pointer;
+      margin-left: 8px;
+      line-height: 1;
+    }
+    .btn-remove:hover {
+      background: #111;
+      color: #fff;
+    }
+    .btn-clear-cart {
+      background: transparent;
+      border: 1px dashed #777;
+      color: #555;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+    .btn-clear-cart:hover {
+      border-color: #111;
+      color: #111;
+      background: rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. STICKY HEADER -->
+  <header>
+    <div class="header-main">
+      <div class="status-live">
+        <span class="dot"></span>
+        <span>ДОСТАВКА 20 МИН</span>
+      </div>
+      <a href="#" class="brand-logo heading-font">НАГЛО</a>
+      <a href="#checkout" class="cart-pill" id="cartHeaderBtn">[ ДОБЫЧА: <span id="cartCount">0</span> ]</a>
+    </div>
+    <div class="ticker">
+      <div class="ticker-inner">
+        /// БЕЗ ГЛЮТЕНОВОГО НЫТЬЯ /// СВЕРХСЫТНОСТЬ ПО ФАКТУ /// 100% ЧИСТЫЙ БЕЛОК /// ЕСЛИ ОПОЗДАЕМ — ЕДА БЕСПЛАТНО /// ПРОВЕРЕНО НА ЛЮДЯХ /// СВЕРХСЫТНОСТЬ ПО ФАКТУ /// 
+      </div>
+      <div class="ticker-inner">
+        /// БЕЗ ГЛЮТЕНОВОГО НЫТЬЯ /// СВЕРХСЫТНОСТЬ ПО ФАКТУ /// 100% ЧИСТЫЙ БЕЛОК /// ЕСЛИ ОПОЗДАЕМ — ЕДА БЕСПЛАТНО /// ПРОВЕРЕНО НА ЛЮДЯХ /// СВЕРХСЫТНОСТЬ ПО ФАКТУ /// 
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO SECTION -->
+  <section class="hero-section">
+    <video class="video-bg" autoplay muted loop playsinline preload="auto">
+      <source src="./hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-tagline">ЧЕСТНЫЙ ПЕРЕКУС ОТ 120 ₽. МАКСИМУМ БЕЛКА.</div>
+      <h1 class="hero-title">
+        НАГЛО ВКУСНО.
+        <span>БЕЗ СКАЗОК.</span>
+      </h1>
+      <a href="#catalog" class="hero-btn heading-font">РАЗГРАБИТЬ СКЛАД ↓</a>
+    </div>
+  </section>
+
+  <!-- 3. CATALOG SECTION -->
+  <section class="catalog-section" id="catalog">
+    <h2 class="section-title">ВЫБИРАЙ ПО ФАКТУ</h2>
+
+    <div class="filters-bar">
+      <button class="filter-tag active" onclick="filterItems('all', event)">[ Все сразу ]</button>
+      <button class="filter-tag" onclick="filterItems('protein', event)">[ Только белок ]</button>
+      <button class="filter-tag" onclick="filterItems('spicy', event)">[ Остро так, что плачешь ]</button>
+      <button class="filter-tag" onclick="filterItems('hunger', event)">[ Голод собачий ]</button>
+    </div>
+
+    <div class="grid-catalog" id="catalogGrid">
+      
+      <!-- Карточка 1 -->
+      <div class="card" data-category="spicy hunger">
+        <div class="card-img-wrapper">
+          <span class="card-badge">HOT</span>
+          <img src="./beef.jpg" alt="Дымная говядина & Дикий перец" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Дымная говядина & Перец</h3>
+          <div class="card-specs">БЕЛКИ: 38G / УГЛЕВОДЫ: 2G</div>
+          <p class="card-desc">Сушеное фермерское мясо без жидкого дыма и соевого мусора. Честный волокнистый стейк в кармане.</p>
+          <div class="card-action">
+            <span class="card-price">280 ₽</span>
+            <button class="btn-add" onclick="addToCart('Дымная говядина', 280)">+ В КОРЗИНУ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 2 -->
+      <div class="card" data-category="spicy">
+        <div class="card-img-wrapper">
+          <span class="card-badge">CRUNCH</span>
+          <img src="./lime.jpg" alt="Кислотный лайм & Острый халапеньо" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Лайм & Халапеньо Начос</h3>
+          <div class="card-specs">БЕЛКИ: 8G / ВКУС: РАЗРЫВ</div>
+          <p class="card-desc">Хруст на весь район. Настоящий перец, обжигающий лайм и кукурузные чипсы нормальной плотности.</p>
+          <div class="card-action">
+            <span class="card-price">160 ₽</span>
+            <button class="btn-add" onclick="addToCart('Лайм-Халапеньо', 160)">+ В КОРЗИНУ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 3 -->
+      <div class="card" data-category="hunger">
+        <div class="card-img-wrapper">
+          <span class="card-badge">TOP</span>
+          <img src="./cheese.jpg" alt="Трюфельный пармезан & Чеснок" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Пармезан & Трюфель</h3>
+          <div class="card-specs">СЫР: 100% / БЕЗ АРОМАТИЗАТОРОВ</div>
+          <p class="card-desc">Запеченные сырные кусочки со специями. Дорогой вкус без ресторанной наценки за сервис.</p>
+          <div class="card-action">
+            <span class="card-price">240 ₽</span>
+            <button class="btn-add" onclick="addToCart('Пармезан-Трюфель', 240)">+ В КОРЗИНУ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 4 -->
+      <div class="card" data-category="hunger">
+        <div class="card-img-wrapper">
+          <span class="card-badge">FATAL</span>
+          <img src="./bacon.jpg" alt="Копченый бекон & Хрустящий лук" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Бекон & Жареный лук</h3>
+          <div class="card-specs">СЫТНОСТЬ: 10/10 / САХАР: 0G</div>
+          <p class="card-desc">Хрустящие луковые кольца и вяленый копченый бекон. Когда надо плотно заправиться прямо на бегу.</p>
+          <div class="card-action">
+            <span class="card-price">190 ₽</span>
+            <button class="btn-add" onclick="addToCart('Бекон-Лук', 190)">+ В КОРЗИНУ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 5 -->
+      <div class="card" data-category="protein">
+        <div class="card-img-wrapper">
+          <span class="card-badge">24G PROTEIN</span>
+          <img src="./almond.jpg" alt="Чистый миндаль & Морская соль" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Миндаль & Розовая соль</h3>
+          <div class="card-specs">БЕЛКИ: 24G / ЧИСТЫЙ ОРЕХ</div>
+          <p class="card-desc">Калиброванный калифорнийский орех сухого обжара с кристаллами соли. Ни капли лишнего масла.</p>
+          <div class="card-action">
+            <span class="card-price">210 ₽</span>
+            <button class="btn-add" onclick="addToCart('Миндаль 24G', 210)">+ В КОРЗИНУ</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. MANIFESTO -->
+  <section class="manifesto-section">
+    <div class="manifesto-container">
+      <h2 class="section-title">ПОЧЕМУ ДРУГИЕ ВРУТ, А МЫ НЕТ</h2>
+      <div class="comparison-table">
+        <div class="comp-col them">
+          <h3 class="heading-font">ОНИ (ГЛЯНЦЕВЫЙ ЗОЖ)</h3>
+          <div class="comp-item">✕ «Воздушные эко-чипсы из полбы» (весят 20 грамм).</div>
+          <div class="comp-item">✕ Наценка 300% за крафтовую бежевую коробочку.</div>
+          <div class="comp-item">✕ Состав набран шрифтом 3pt, сахар замаскирован под сироп агавы.</div>
+          <div class="comp-item">✕ «Попробуйте гармонию вкуса с нотками прованских трав».</div>
+        </div>
+        <div class="comp-col naglo">
+          <h3 class="heading-font">НАГЛО (ПО ФАКТУ)</h3>
+          <div class="comp-item">✓ Плотная пачка 150–220г. Наелся и пошел работать дальше.</div>
+          <div class="comp-item">✓ Платишь за белок и реальный продукт, а не за маркетинг.</div>
+          <div class="comp-item">✓ Состав крупными буквами прямо на фасаде пачки. Без звездочек.</div>
+          <div class="comp-item">✓ «Много вяленого мяса и соли. Не благодари».</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. DELIVERY TIMELINE -->
+  <section class="timeline-section">
+    <h2 class="section-title">20 МИНУТ И МЫ У ДВЕРИ</h2>
+    <div class="timeline-grid">
+      <div class="time-step">
+        <div class="step-num">01</div>
+        <h3 class="heading-font">00:00 — СБОРКА</h3>
+        <p>Пакуем твой заказ в вакуум за 120 секунд. Склад работает быстрее конвейера сборки спорткаров.</p>
+      </div>
+      <div class="time-step">
+        <div class="step-num">02</div>
+        <h3 class="heading-font">00:10 — СПРИНТ</h3>
+        <p>Курьер уже несется по дворам. Никаких опозданий: светофоры ему зеленые по умолчанию.</p>
+      </div>
+      <div class="time-step">
+        <div class="step-num">03</div>
+        <h3 class="heading-font">00:20 — ДОБЫЧА</h3>
+        <p>Звонок в дверь. Забирай еду. Опоздали хоть на 3 минуты? Весь заказ достается тебе бесплатно.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. TERMINAL CHECKOUT -->
+  <section class="checkout-section" id="checkout">
+    <div class="terminal-wrapper">
+      <div class="receipt-header">
+        <h2 class="heading-font" style="font-size: 2rem;">ТЕРМИНАЛ ДОСТАВКИ</h2>
+        <p style="font-size: 0.8rem; font-weight: 700;">ООО "НАГЛО СНЕКС" // ЧЕК ЗАКАЗА №8841</p>
+      </div>
+
+      <div class="receipt-items" id="receiptItems">
+        <div class="receipt-row" style="color: #777;">
+          <span>Корзина пуста. Добавь что-нибудь сверху!</span>
+        </div>
+      </div>
+
+      <form class="checkout-form" onsubmit="handleOrderSubmit(event)">
+        <div class="form-group">
+          <label>Куда везти? (Улица, дом, кв, код домофона)</label>
+          <input type="text" class="form-control" placeholder="ул. Ленина 12, кв 44, домофон 44К" required>
+        </div>
+
+        <div class="form-group">
+          <label>Номер телефона для связи</label>
+          <input type="tel" class="form-control" placeholder="+7 (999) 000-00-00" required>
+        </div>
+
+        <div class="form-group">
+          <label>Как передать еду?</label>
+          <select class="form-control">
+            <option>Оставить у двери и быстро уйти</option>
+            <option>Вручить в руки (постучать громко)</option>
+            <option>Позвонить за 2 минуты до приезда</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Способ оплаты</label>
+          <select class="form-control">
+            <option>СБП / Быстрый перевод</option>
+            <option>Картой курьеру при получении</option>
+            <option>Наличные (ищи без сдачи)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit">ПОДТВЕРДИТЬ И ЖДАТЬ ЗВОНКА</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 7. FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h3 class="heading-font" style="color: var(--orange); margin-bottom: 12px;">НАГЛО</h3>
+        <p>Честный масс-маркет нового поколения. Мы не продаем воздух в пачках, мы кормим людей.</p>
+      </div>
+      <div>
+        <h4 class="heading-font" style="margin-bottom: 12px;">ШТРИХКОДЫ И СЕТИ</h4>
+        <p>TG: @naglo_snacks</p>
+        <p>VK: /naglo_food</p>
+        <p>CAREER: job@naglo.io</p>
+      </div>
+      <div>
+        <img src="./stickers.jpg" alt="Graphic stickers" class="sticker-strip" loading="lazy">
+        <p style="color: #666; font-size: 0.75rem;">© 2026 НАГЛО. Сделано без совести, но со вкусом.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL TIMER -->
+  <div class="timer-modal" id="timerModal">
+    <div class="timer-content">
+      <h2 class="heading-font" style="font-size: 2rem;">ЗАКАЗ УЛЕТЕЛ НА СКЛАД!</h2>
+      <p style="color: #aaa; margin-top: 8px;">Курьер уже обувает кроссовки. Таймер тикает:</p>
+      <div class="timer-display" id="timerValue">20:00</div>
+      <p style="font-size: 0.85rem; color: var(--orange);">Если дойдем до 00:00 — еда за наш счет.</p>
+      <button class="btn-add" style="margin-top: 24px;" onclick="closeModal()">ПОНЯЛ, ЖДУ</button>
+    </div>
+  </div>
+
+ <script>
     const cart = [];
 
     function addToCart(title, price) {
@@ -107,3 +1035,5 @@
       clearCart();
     }
   </script>
+</body>
+</html>
